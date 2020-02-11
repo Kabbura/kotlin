@@ -62,7 +62,7 @@ private fun checkExpressionArgument(
     ): KotlinCallDiagnostic? {
         if (unstableType != null) {
             if (csBuilder.addSubtypeConstraintIfCompatible(unstableType, actualExpectedType, position)) {
-                return UnstableSmartCast(expressionArgument, unstableType)
+                return UnstableSmartCast(expressionArgument, unstableType, isReceiver)
             }
         }
 
@@ -110,7 +110,7 @@ private fun checkExpressionArgument(
         val expectedNullableType = expectedType.makeNullableAsSpecified(true)
 
         if (unstableType != null && csBuilder.addSubtypeConstraintIfCompatible(unstableType, expectedType, position)) {
-            diagnosticsHolder.addDiagnostic(UnstableSmartCast(expressionArgument, unstableType))
+            diagnosticsHolder.addDiagnostic(UnstableSmartCast(expressionArgument, unstableType, isReceiver))
         } else if (csBuilder.addSubtypeConstraintIfCompatible(argumentType, expectedNullableType, position)) {
             diagnosticsHolder.addDiagnostic(UnsafeCallError(expressionArgument))
         } else {

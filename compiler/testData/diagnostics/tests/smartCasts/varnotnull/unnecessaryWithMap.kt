@@ -13,7 +13,7 @@ class MyClass {
         m = create()
         // See KT-7428
         for ((k, v) in <!SMARTCAST_IMPOSSIBLE!>m<!>)
-            res += (k.length + v.length)
+            res <!OVERLOAD_RESOLUTION_AMBIGUITY!>+=<!> (<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>k<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>length<!> <!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>+<!> <!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>v<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>length<!>)
         return res
     }
 }
