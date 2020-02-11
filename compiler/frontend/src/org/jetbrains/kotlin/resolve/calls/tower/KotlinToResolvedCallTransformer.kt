@@ -654,7 +654,7 @@ class NewResolvedCallImpl<D : CallableDescriptor>(
     private var dispatchReceiver = resolvedCallAtom.dispatchReceiverArgument?.receiver?.receiverValue
     private var smartCastDispatchReceiverType: KotlinType? = null
     private var expedtedTypeForSamConvertedArgumentMap: MutableMap<ValueArgument, UnwrappedType>? = null
-    private var argumentTypeForConstantConvertedMap: MutableMap<ValueArgument, IntegerValueTypeConstant>? = null
+    private var argumentTypeForConstantConvertedMap: MutableMap<KtExpression, IntegerValueTypeConstant>? = null
 
 
     override val kotlinCall: KotlinCall get() = resolvedCallAtom.atom
@@ -795,8 +795,10 @@ class NewResolvedCallImpl<D : CallableDescriptor>(
             .substituteAndApproximateTypes(compositeSubstitutor, typeApproximator)
     }
 
-    fun getArgumentTypeForConstantConvertedArgument(valueArgument: ValueArgument): IntegerValueTypeConstant? =
-        argumentTypeForConstantConvertedMap?.get(valueArgument)
+    fun getArgumentTypeForConstantConvertedArgument(valueArgument: ValueArgument): IntegerValueTypeConstant? {
+        val expression = valueArgument.getArgumentExpression() ?: return null
+        return argumentTypeForConstantConvertedMap?.get(expression)
+    }
 
     fun getExpectedTypeForSamConvertedArgument(valueArgument: ValueArgument): UnwrappedType? =
         expedtedTypeForSamConvertedArgumentMap?.get(valueArgument)
@@ -806,7 +808,8 @@ class NewResolvedCallImpl<D : CallableDescriptor>(
 
         argumentTypeForConstantConvertedMap = hashMapOf()
         for ((argument, convertedConstant) in resolvedCallAtom.argumentsWithConstantConversion) {
-            argumentTypeForConstantConvertedMap!![argument.psiCallArgument.valueArgument] = convertedConstant
+            val expression = argument.psiExpression ?: continue
+            argumentTypeForConstantConvertedMap!![expression] = convertedConstant
         }
     }
 
