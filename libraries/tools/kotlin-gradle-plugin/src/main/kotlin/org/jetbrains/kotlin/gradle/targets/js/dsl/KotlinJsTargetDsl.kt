@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJsDce
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.targets.js.KotlinJsPlatformTestRun
 import org.jetbrains.kotlin.gradle.targets.js.KotlinJsReportAggregatingTestRun
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsBinaryContainer
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsExec
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
@@ -50,6 +51,8 @@ interface KotlinJsTargetDsl : KotlinTarget {
     fun produceKotlinLibrary()
 
     fun produceExecutable()
+
+    val binaries: KotlinJsBinaryContainer
 
     val testRuns: NamedDomainObjectContainer<KotlinJsReportAggregatingTestRun>
 }
