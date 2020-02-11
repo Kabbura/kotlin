@@ -30,7 +30,10 @@ import org.jetbrains.kotlin.types.isDynamic
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.isNothing
 import org.jetbrains.kotlin.types.typeUtil.isNullableNothing
+import org.jetbrains.kotlin.util.ExceptionWithAttachmentWrapper
 import org.jetbrains.kotlin.util.descriptorsEqualWithSubstitution
+import org.jetbrains.kotlin.util.ea141456
+import java.lang.IllegalStateException
 import java.util.*
 
 class ArtificialElementInsertHandler(
@@ -304,7 +307,10 @@ fun DeclarationDescriptor.fuzzyTypesForSmartCompletion(
     }
 
     if (this is CallableDescriptor) {
-        val returnType = fuzzyReturnType() ?: return emptyList()
+        val returnType =
+            ea141456()
+                .vars(this, this.returnType)
+                .invoke { fuzzyReturnType() } ?: return emptyList()
 
         // skip declarations of types Nothing, Nothing?, dynamic or of generic parameter type which has no real bounds
         if (returnType.type.isNothing() ||
