@@ -232,7 +232,8 @@ class IDEKotlinAsJavaSupport(private val project: Project) : KotlinAsJavaSupport
             psiManager, facadeFqName, moduleInfo.contentScope()
         )
 
-        return if (lightClassForFacade !== null) withFakeLightClasses(lightClassForFacade) else emptyList()
+        return lightClassForFacade?.let { listOf(it) } ?: emptyList()
+        //return if (lightClassForFacade !== null) withFakeLightClasses(lightClassForFacade) else emptyList()
     }
 
     override fun findFilesForFacade(facadeFqName: FqName, scope: GlobalSearchScope): Collection<KtFile> {
